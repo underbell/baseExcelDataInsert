@@ -1,3 +1,5 @@
+package test.data;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Connection;
@@ -15,9 +17,13 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class BaseDataInsert	{
+	/**
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception {
 		String DB_URL = SystemValue.DB_URL;
-		String DB_USER = SystemValue.DB_URL;
+		String DB_USER = SystemValue.DB_USER;
 		String DB_PASSWORD = SystemValue.DB_PASSWORD;
 		String EXCEL_DATA_FORDER = SystemValue.EXCEL_DATA_FORDER;
 		
@@ -104,10 +110,14 @@ public class BaseDataInsert	{
     		}
 		}catch (Exception e) {
 			e.printStackTrace();
-			conn.rollback();
+			if(conn != null)	{
+				conn.rollback();
+			}
 		}finally	{
-			conn.commit();
-			conn.close();
+			if(conn != null)	{
+				conn.commit();
+				conn.close();
+			}
 		}
 	}
 	
@@ -126,4 +136,3 @@ public class BaseDataInsert	{
 	    return "";
 	}
 }
-
