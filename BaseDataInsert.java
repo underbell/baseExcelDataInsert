@@ -64,18 +64,17 @@ public class BaseDataInsert	{
 
 		        while (iterator.hasNext()) {
 		            Row nextRow = iterator.next();
-		            Iterator<Cell> cellIterator = nextRow.cellIterator();
 		            ArrayList<String> columnData = new ArrayList<String>();
 		            LocalDateTime currentTime = LocalDateTime.now();
 		            Timestamp t = Timestamp.valueOf(currentTime);
-		            while (cellIterator.hasNext()) {
-		                Cell cell = cellIterator.next();
-		                if(j == 0)	{
-		                	column.add(getCellValue(cell));
+		            for(int k = 0; k < nextRow.getLastCellNum() ; k++)	{
+		            	Cell cell = nextRow.getCell(k);
+		            	if(j == 0)	{
+		                	column.add(k, getCellValue(cell));
 		                	columnName.append(", ").append(getCellValue(cell));
 		                	prepareColumnData.append(", ?");
 		                }else	{
-		                	columnData.add(getCellValue(cell));
+		                	columnData.add(k, getCellValue(cell));
 		                }
 		            }
 
@@ -127,17 +126,20 @@ public class BaseDataInsert	{
 	}
 
 	private static String getCellValue(Cell cell) {
-	    switch (cell.getCellType()) {
-	    case Cell.CELL_TYPE_STRING:
-	        return cell.getStringCellValue();
+		if(cell != null)	{
+		    switch (cell.getCellType()) {
+		    case Cell.CELL_TYPE_STRING:
+		        return cell.getStringCellValue();
 
-	    case Cell.CELL_TYPE_BOOLEAN:
-	        return String.valueOf(cell.getBooleanCellValue());
+		    case Cell.CELL_TYPE_BOOLEAN:
+		        return String.valueOf(cell.getBooleanCellValue());
 
-	    case Cell.CELL_TYPE_NUMERIC:
-	        return String.valueOf(cell.getNumericCellValue());
-	    }
-
+		    case Cell.CELL_TYPE_NUMERIC:
+		        return String.valueOf(cell.getNumericCellValue());
+		    case Cell.CELL_TYPE_BLANK:
+		        return "";
+		    }
+		}
 	    return "";
 	}
 }
